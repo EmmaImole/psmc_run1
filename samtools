@@ -1,0 +1,22 @@
+
+!/bin/bash
+#$ -N analysis
+#$ -cwd
+#$ -l rl9=true
+#$ -pe sharedmem 4
+#$ -l h_vmem=16G  # Memory limit (modify as needed)
+#$ -j y
+#$ -m ea
+#$ -M email address
+
+# Initialise the environment modules
+. /etc/profile.d/modules.sh
+
+# load the modules required
+module load roslin/samtools/1.9
+module load roslin/bcftools/1.20
+module load igmm/libs/htslib/1.20
+
+# Run samtools to generate the consensus sequence
+samtools mpileup -uf GCA_905237065.1 aligned_sorted.bam | bcftools call -c | vcfutils.pl vcf2fq > consensus.fq
+
