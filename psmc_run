@@ -1,0 +1,19 @@
+#!/bin/bash
+#$ -N analysis
+#$ -cwd
+#$ -l rl9=true
+#$ -pe sharedmem 4
+#$ -l h_vmem=16G  # Memory limit (modify as needed)
+#$ -j y
+#$ -m ea
+#$ -M email address
+
+
+# path location of the instaslled psmc
+export PATH=/exports/eddie/scratch/s2749646/psmc
+
+# convert consensus.FASTQ file to PSMC format
+fq2psmcfa -q20 consensus.fq > consensus.psmcfa
+
+# run PSMC
+psmc -N25 -t15 -r5 -p "4+25*2+4+6" -o consensus.psmc consensus.psmcfa
