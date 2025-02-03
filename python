@@ -1,0 +1,54 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define parameters
+mutation_rate = 1.4e-8  # Mutation rate per site per generation
+generation_time = 6     # Years per generation
+
+# Read PSMC output file
+psmc_file = "consensus.psmc"
+time_series = []
+pop_series = []
+
+with open(psmc_file, "r") as f:
+    current_times = []
+    current_pop_sizes = []
+
+    for line in f:
+        if line.startswith("RS"):  # RS lines contain estimated population sizes
+            values = line.strip().split()
+            current_times.append(float(values[2]))  # Time
+            current_pop_sizes.append(float(values[3]))  # Population size
+        elif line.startswith("//"):  # Marks end of a run
+            if current_times:
+                time_series.append(np.array(current_times))
+                pop_series.append(np.array(current_pop_sizes))
+                current_times, current_pop_sizes = [], []
+
+# Convert PSMC time units to real time
+time_series = [times / mutation_rate * generation_time for times in time_series]
+pop_series = [pop_sizes for pop_sizes in pop_series]
+# Create a unique color for each line
+colors = [f"C{i}" for i in range(len(time_series))]  # Generates distinct colors
+
+# Plot results
+plt.figure(figsize=(10, 6))
+
+plt.step(time_series[1], pop_series[1], where="mid", color="b", lw=2, label="Main Run")
+
+
+plt.xscale("log")  # Log scale for better visualization
+plt.yscale("log")
+plt.xlabel("Time (years ago)")
+plt.ylabel("Effective Population Size")
+plt.title("PSMC Population Size History")
+plt.grid(True, which="both", linestyle="--", alpha=0.6)
+
+# Add a legend to identify each run
+
+plt.legend(title="Generational scenarios", loc="upper left", fontsize="small")
+
+
+# Save and display the plot
+plt.savefig("psmc_plot_colored.png", dpi=300)
+plt.show()
