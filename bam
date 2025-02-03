@@ -1,0 +1,24 @@
+  GNU nano 5.6.1                                   bamsorting.sh
+!/bin/bash
+#$ -N analysis
+#$ -cwd
+#$ -l rl9=true
+#$ -pe sharedmem 4
+#$ -l h_vmem=16G  # Memory limit (modify as needed)
+#$ -j y
+#$ -m ea
+#$ -M email address
+
+# Initialise the environment modules
+. /etc/profile.d/modules.sh
+#load module samtools
+module load roslin/samtools/1.9
+
+#convert the sam file to bam
+samtools view -bS aligned.sam -o aligned.bam
+
+# sort the BAM file
+samtools sort -o aligned_sorted.bam aligned.bam
+
+# index the sorted bam file
+samtools index aligned_sorted.bam
