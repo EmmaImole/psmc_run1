@@ -48,7 +48,6 @@ plt.grid(True, which="both", linestyle="--", alpha=0.6)
 
 plt.legend(title="Generational scenarios", loc="upper left", fontsize="small")
 
-
 # Save and display the plot
-plt.savefig("psmc_plot_colored.png", dpi=300)
+plt.savefig("psmc_plot.png", dpi=300)
 plt.show()
