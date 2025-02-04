@@ -10,3 +10,5 @@ and built the PSMC using
 $ make
 The fq2psmcfa was compiled using the command below, however, this must be in -lz as a zip file to prevent large memory usage.
 $ gcc -O2 -o fq2psmcfa -I /exports/eddie/scratch/s2749646/psmc fq2psmcfa.c -lz
+# psmc run
+the fastq file was converted to psmcfa format using the fq2psmcfa package. Then run the psmc on the converted file with maximum interation set at 25, theta/p ration to 15 (which is the ratio of the product of muataion rate and the sequence length to that of the recombination rate and sequence length), the atomic time interval for grouping coalescent events over time was set at 5. the time period was sliptted with an adjustable values into the recent history, mediums-scale history, another recent changes, and very ancient history.
